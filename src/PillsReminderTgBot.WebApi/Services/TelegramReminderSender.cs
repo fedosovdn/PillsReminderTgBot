@@ -31,7 +31,7 @@ public sealed class TelegramReminderSender : IReminderSender
             cancellationToken: cancellationToken);
 
         _logger.LogInformation(
-            "Reminder message sent. CycleId={CycleId} Attempt={Attempt} ChatId={ChatId}.",
+            "Сообщение-напоминание отправлено. CycleId={CycleId} Attempt={Attempt} ChatId={ChatId}.",
             reminderEvent.CycleId,
             reminderEvent.Attempt,
             reminderEvent.ChatId);

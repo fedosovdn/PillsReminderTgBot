@@ -15,7 +15,7 @@ public sealed class LoggingReminderSender : IReminderSender
     public Task SendReminderAsync(ReminderEvent reminderEvent, CancellationToken cancellationToken)
     {
         _logger.LogInformation(
-            "Reminder sent. CycleId={CycleId} Attempt={Attempt} ChatId={ChatId} ScheduledAtUtc={ScheduledAtUtc:O} SentAtUtc={SentAtUtc:O}",
+            "Напоминание отправлено. CycleId={CycleId} Attempt={Attempt} ChatId={ChatId} ScheduledAtUtc={ScheduledAtUtc:O} SentAtUtc={SentAtUtc:O}",
             reminderEvent.CycleId,
             reminderEvent.Attempt,
             reminderEvent.ChatId,

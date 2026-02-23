@@ -23,7 +23,7 @@ public sealed class TelegramPollingService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Starting Telegram polling.");
+        _logger.LogInformation("Запуск опроса Telegram.");
         var offset = 0;
 
         while (!stoppingToken.IsCancellationRequested)

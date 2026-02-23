@@ -52,14 +52,14 @@ public sealed class ReminderBackgroundService : BackgroundService
 
             if (delay > TimeSpan.Zero)
             {
-                _logger.LogInformation("Next reminder scheduled at {NextOccurrenceUtc:O} (UTC).", nextOccurrenceUtc);
+                _logger.LogInformation("Следующее напоминание запланировано на {NextOccurrenceUtc:O} (UTC).", nextOccurrenceUtc);
                 await _timeProvider.DelayAsync(delay, stoppingToken);
             }
 
             var recipients = _recipientStore.GetAll();
             if (recipients.Count == 0)
             {
-                _logger.LogInformation("No recipients registered. Skipping reminder cycle.");
+                _logger.LogInformation("Получателей нет. Пропускаю цикл напоминаний.");
                 continue;
             }
 
@@ -79,7 +79,7 @@ public sealed class ReminderBackgroundService : BackgroundService
         {
             if (_ackStore.IsConfirmed(cycleId))
             {
-                _logger.LogInformation("Reminder cycle confirmed. CycleId={CycleId} ChatId={ChatId}.", cycleId, chatId);
+                _logger.LogInformation("Цикл напоминаний подтвержден. CycleId={CycleId} ChatId={ChatId}.", cycleId, chatId);
                 return;
             }
 
@@ -89,7 +89,7 @@ public sealed class ReminderBackgroundService : BackgroundService
 
             if (sentAtUtc + options.Repeat.Interval > repeatUntilUtc)
             {
-                _logger.LogInformation("Repeat window expired. CycleId={CycleId} ChatId={ChatId}.", cycleId, chatId);
+                _logger.LogInformation("Окно повторов истекло. CycleId={CycleId} ChatId={ChatId}.", cycleId, chatId);
                 return;
             }
 

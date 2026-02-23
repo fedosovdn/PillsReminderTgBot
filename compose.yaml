@@ -1,9 +1,8 @@
 services:
-  pillsremindertgbot.webapi:
-    image: pillsremindertgbot.webapi
-    build:
-      context: .
-      dockerfile: src/PillsReminderTgBot.WebApi/Dockerfile
+  pillsremindertgbot:
+    image: fedosovdn/pillsremindertgbot:1.0.0
+    container_name: pillsremindertgbot
+    restart: unless-stopped
     env_file:
       - .env
     ports:

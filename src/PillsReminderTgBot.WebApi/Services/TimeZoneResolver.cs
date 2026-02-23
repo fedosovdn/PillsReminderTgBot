@@ -20,7 +20,7 @@ public sealed class TimeZoneResolver : ITimeZoneResolver
     {
         if (string.IsNullOrWhiteSpace(timeZoneId))
         {
-            _logger.LogWarning("TimeZoneId is empty. Falling back to UTC.");
+            _logger.LogWarning("TimeZoneId пустой. Переходим на UTC.");
             return TimeZoneInfo.Utc;
         }
 
@@ -31,11 +31,11 @@ public sealed class TimeZoneResolver : ITimeZoneResolver
 
         if (WindowsToIana.TryGetValue(timeZoneId, out var ianaId) && TryFind(ianaId, out timeZone))
         {
-            _logger.LogInformation("Mapped time zone id {WindowsId} to {IanaId}.", timeZoneId, ianaId);
+            _logger.LogInformation("Сопоставлен идентификатор часового пояса {WindowsId} с {IanaId}.", timeZoneId, ianaId);
             return timeZone;
         }
 
-        _logger.LogWarning("Unknown time zone id {TimeZoneId}. Falling back to UTC.", timeZoneId);
+        _logger.LogWarning("Неизвестный идентификатор часового пояса {TimeZoneId}. Переходим на UTC.", timeZoneId);
         return TimeZoneInfo.Utc;
     }
 

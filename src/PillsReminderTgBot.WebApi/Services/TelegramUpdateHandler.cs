@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using PillsReminderTgBot.WebApi.Models;
+using PillsReminderTgBot.WebApi.Options;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -13,6 +14,7 @@ public sealed class TelegramUpdateHandler : ITelegramUpdateHandler
     private readonly IReminderAcknowledgementStore _ackStore;
     private readonly IReminderStatusService _statusService;
     private readonly IReminderSender _sender;
+    private readonly IOptions<ReminderOptions> _options;
     private readonly TimeProvider _timeProvider;
     private readonly ILogger<TelegramUpdateHandler> _logger;
 
@@ -21,6 +23,7 @@ public sealed class TelegramUpdateHandler : ITelegramUpdateHandler
         IReminderAcknowledgementStore ackStore,
         IReminderStatusService statusService,
         IReminderSender sender,
+        IOptions<ReminderOptions> options,
         TimeProvider timeProvider,
         ILogger<TelegramUpdateHandler> logger)
     {
@@ -28,13 +31,14 @@ public sealed class TelegramUpdateHandler : ITelegramUpdateHandler
         _ackStore = ackStore;
         _statusService = statusService;
         _sender = sender;
+        _options = options;
         _timeProvider = timeProvider;
         _logger = logger;
     }
 
     public Task HandleErrorAsync(Exception exception, CancellationToken cancellationToken)
     {
-        _logger.LogError(exception, "Telegram polling error.");
+        _logger.LogError(exception, "Ошибка опроса Telegram.");
         return Task.CompletedTask;
     }
 
@@ -63,9 +67,10 @@ public sealed class TelegramUpdateHandler : ITelegramUpdateHandler
         if (string.Equals(command, "/start", StringComparison.OrdinalIgnoreCase))
         {
             _recipientStore.Register(message.Chat.Id);
+            var dailyTime = _options.Value.DailyTime;
             await botClient.SendMessage(
                 chatId: message.Chat.Id,
-                text: "Готово! Я буду напоминать вам каждый день в 07:00 (MSK).",
+                text: $"Готово! Я буду напоминать вам каждый день в {dailyTime:hh\\:mm} (MSK).",
                 cancellationToken: cancellationToken);
             return;
         }
@@ -128,7 +133,7 @@ public sealed class TelegramUpdateHandler : ITelegramUpdateHandler
         var idPart = data[AckPrefix.Length..];
         if (!Guid.TryParse(idPart, out var cycleId))
         {
-            _logger.LogWarning("Invalid callback data: {CallbackData}", data);
+            _logger.LogWarning("Некорректные данные callback: {CallbackData}", data);
             return;
         }
 
