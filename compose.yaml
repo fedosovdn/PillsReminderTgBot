@@ -1,0 +1,7 @@
+﻿services:
+  pillsremindertgbot.webapi:
+    image: pillsremindertgbot.webapi
+    build:
+      context: .
+      dockerfile: src/PillsReminderTgBot.WebApi/Dockerfile
+
