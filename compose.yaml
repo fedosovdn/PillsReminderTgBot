@@ -1,7 +1,10 @@
-﻿services:
+services:
   pillsremindertgbot.webapi:
     image: pillsremindertgbot.webapi
     build:
       context: .
       dockerfile: src/PillsReminderTgBot.WebApi/Dockerfile
-
+    env_file:
+      - .env
+    ports:
+      - "8090:8080"
